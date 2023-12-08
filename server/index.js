@@ -20,10 +20,7 @@ const checkAPi = (req, res, next)=>{
     const {apiKey} = req.query;
 
     if(apiKey==='shweta'){
-        return res.json({
-            success:true,
-            message:'API ke is valid'
-        })
+       next();
     }else{
         return res.status(401).json({
             success:false,
@@ -55,7 +52,7 @@ const validateParams = (req,res,next)=>{
     next();
 }
 
-app.get('/api/v1/orders',checkAPi, (req,res)=>{
+app.get('/api/v1/orders',checkAPi, async(req,res)=>{
     res.json({
         success: true,
         data:[],
@@ -63,7 +60,13 @@ app.get('/api/v1/orders',checkAPi, (req,res)=>{
     })
 })
 
-
+app.post('/api/v1/orders', checkAPi, validateParams, async(req,res)=>{
+   res.json({
+    success:true,
+    data:{},
+    message:"order is create !"
+   })
+})
 
 const PORT = process.env.PORT || 5000;
 
