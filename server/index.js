@@ -16,15 +16,53 @@ const MongoDBConn = async()=>{
 MongoDBConn();
 
 //middleware
+const checkAPi = (req, res, next)=>{
+    const {apiKey} = req.query;
 
+    if(apiKey==='shweta'){
+        return res.json({
+            success:true,
+            message:'API ke is valid'
+        })
+    }else{
+        return res.status(401).json({
+            success:false,
+            message:'API key is invalid'
+        })
+    }
+}
+const validateParams = (req,res,next)=>{
+    const {title, description, price} = req.body;
 
-app.get('/api/v1/orders',async(req,res)=>{
+    if(!title){
+        return res.json({
+            success:true,
+            message:'title is missing'
+        })
+    }
+    if(!description){
+        return res.json({
+            success:true,
+            message:'description is missing'
+        })
+    }
+    if(!price){
+        return res.json({
+            success:true,
+            message:'price is missing'
+        })
+    }
+    next();
+}
+
+app.get('/api/v1/orders',checkAPi, (req,res)=>{
     res.json({
         success: true,
         data:[],
         message:'successfully fetch orders'
     })
 })
+
 
 
 const PORT = process.env.PORT || 5000;
