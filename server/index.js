@@ -51,11 +51,17 @@ const validateParams = (req,res,next)=>{
     }
     next();
 }
+let count = 0;
+const countApicalls = async(req, res, next)=>{
+    count++;
+    console.log(`API calls ${count}`);
+    next();
+}
 
-app.get('/api/v1/orders',checkAPi, async(req,res)=>{
+app.get('/api/v1/orders',checkAPi, countApicalls, async(req,res)=>{
     res.json({
         success: true,
-        data:[],
+        data:["count:", count],
         message:'successfully fetch orders'
     })
 })
